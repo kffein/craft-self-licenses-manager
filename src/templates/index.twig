@@ -60,6 +60,8 @@
                     {{ csrfInput() }}
                     {{ redirectInput('plugin-license-manager') }}
 
+                    <hr />
+
                     {% for plugin in unregisteredPlugins %}
                         {% set formName = 'pluginsHandle[' ~ plugin.handle ~']' %}
                         {% set isSwitchOn = requestPostPluginsHandle is not empty and requestPostPluginsHandle[plugin.handle] and requestPostPluginsHandle[plugin.handle] == '1' %}
@@ -68,13 +70,14 @@
                         <div class="plugin-info">
                             
                             <div class="plugin-info-icon">
-                                <img src="{{plugin.iconUrl}}" class="plugin-icon" />
+                                <img src="{{ plugin.iconUrl }}" class="plugin-icon" />
                             </div>
 
                             <div class="plugin-info-content">
-                                <p><strong>{{plugin.name}}</strong></p>
-                                <p>{{plugin.handle}}</p>
-                                <p>{{plugin.version}}</p>
+                                <p><strong>{{ plugin.name }}</strong></p>
+                                <p>{{ plugin.handle }}</p>
+                                <p>{{ plugin.version }}</p>
+                                <p class="short-description"><em>{{ plugin.shortDescription }}</em></p>
                             </div>
 
                             <div class="plugin-info-lightswitch">
@@ -87,6 +90,8 @@
 
                             
                         </div>
+
+                        <hr />
 
                     {% endfor %}
 

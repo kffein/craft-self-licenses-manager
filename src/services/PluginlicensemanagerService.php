@@ -75,51 +75,10 @@ class PluginlicensemanagerService extends Component
                 'handle' => $plugin->handle,
                 'version' => $plugin->version,
                 'iconUrl' => $plugin->iconUrl,
+                'shortDescription' => $plugin->shortDescription
             ];
         }, $unregisteredPlugins);
     }
-
-    /**
-     * Return the list of plugins accessible via Craft id api
-     * that is not registered with license
-     *
-     * @return array
-     */
-    // public function getUnregisteredPlugins() : array
-    // {
-    //     $unregisteredPluginsHandle = [];
-
-    //     // Fetch the Api to return uniq plugins handle
-    //     $ownPluginsHandle = $this->getPluginsHandle();
-
-    //     // If API call has error, error set to flash and quit method
-    //     if ($this->hasError()) {
-    //         return null;
-    //     }
-
-    //     // Return the plugins list from the craft DB
-    //     $allPlugins = Craft::$app->plugins->allPluginInfo;
-
-    //     // Filter plugins DB list to return only own plugin from the API
-    //     $plugins = array_filter($allPlugins, function ($pluginHandle) use ($ownPluginsHandle) {
-    //         return in_array($pluginHandle, $ownPluginsHandle);
-    //     }, ARRAY_FILTER_USE_KEY);
-
-    //     // Filter out plugin with license status is invalid
-    //     $unregisteredPlugins = array_filter($plugins, function ($plugin) {
-    //         return $plugin['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
-    //     });
-
-    //     // Loop plugins and return name + handle data
-    //     foreach ($unregisteredPlugins as $plugin) {
-    //         $unregisteredPluginsHandle[] = [
-    //             'handle' => $plugin['moduleId'],
-    //             'name' => $plugin['name']
-    //         ];
-    //     }
-
-    //     return $unregisteredPluginsHandle;
-    // }
 
     /**
      * Generate the license with the Craft id API
@@ -147,36 +106,6 @@ class PluginlicensemanagerService extends Component
     }
 
     /**
-     * Return plugin that is not returner by the Craft id API
-     * Api return only data for license. If no license for a plugin exist yet, it will not be returned by the api
-     * To fix this, we looked into the composer.json require library, and get library with the same author as the username plugin
-     * Return plugin that not exist in craft id api
-     *
-     * @return void
-     */
-    public function getPluginsHandleWithoutApiResult()
-    {
-        $apiPlugins = $this->getPluginsHandle();
-        $composerPlugins = $this->getComposerPluginshandle();
-        $availablePlugins = Craft::$app->plugins->allPluginInfo;
-        $availablePluginsHandle = [];
-
-        foreach ($availablePlugins as $pluginHandle => $plugin) {
-            $availablePluginsHandle[] = $pluginHandle;
-        }
-
-        $composerPlugins = array_filter($composerPlugins, function ($pluginHandle) use ($availablePluginsHandle) {
-            return in_array($pluginHandle, $availablePluginsHandle);
-        });
-
-        $missingApiPluginsHandle = array_filter($composerPlugins, function ($composerPlugin) use ($apiPlugins) {
-            return (!in_array($composerPlugin, $apiPlugins));
-        });
-
-        return $missingApiPluginsHandle;
-    }
-
-    /**
      * Validate if settings is valid by request Craft id api
      *
      * @return boolean
@@ -187,6 +116,12 @@ class PluginlicensemanagerService extends Component
         return (!isset($result->message));
     }
 
+    /**
+     * Get the complete plugins list
+     * Filter plugins with the same developerName as the settings (case-insensitive)
+     *
+     * @return array
+     */
     private function getPluginsByDeveloperName() : array
     {
         $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
@@ -196,47 +131,6 @@ class PluginlicensemanagerService extends Component
             return strtolower($plugin['developerName']) === strtolower($developerName);
         }));
         return $developerPlugins;
-    }
-
-    /**
-    * Fetch api and return uniq plugins handle
-    *
-    * @return array
-    */
-    private function getPluginsHandle() : ?array
-    {
-        $page = 1;
-        $licensesHandles = [];
-        $licensesInfo = $this->getLicenses($page);
-        $this->validateRequest($licensesInfo);
-
-        if ($this->hasError()) {
-            return null;
-        }
-
-        $totalPages = $licensesInfo->totalPages;
-        $licenses = $licensesInfo->licenses;
-
-        // Loop each license and save uniq plugin handle
-        foreach ($licenses as $license) {
-            if (!in_array($license->pluginHandle, $licensesHandles)) {
-                $licensesHandles[] = $license->pluginHandle;
-            }
-        }
-
-        // If pagination, continue to find plugin handles
-        while ($page < $totalPages) {
-            $licensesInfo = $this->getLicenses($page);
-            $licenses = $licensesInfo->licenses;
-            foreach ($licenses as $license) {
-                if (!in_array($license, $licensesHandles)) {
-                    $licensesHandles[] = $license;
-                }
-            }
-            $page++;
-        }
-
-        return $licensesHandles;
     }
 
     /**
@@ -273,44 +167,6 @@ class PluginlicensemanagerService extends Component
         $result = $this->makeRequest($url, $options);
 
         return $result;
-    }
-
-    /**
-     * Read composer.json file and return node require + require-dev
-     * with author as same as username
-     *
-     * @return void
-     */
-    private function getComposerPluginshandle()
-    {
-        $composerPath = Craft::$app->composer->jsonPath;
-        if ($composerPath === null) {
-            return [];
-        }
-        $composerContent = file_get_contents($composerPath);
-        $composerContent = json_decode($composerContent);
-        $username = $this->settings->username;
-        $pluginsPaths = [];
-        $pluginsHandle = [];
-
-        $composerPluginNodes = ['require', 'require-dev'];
-
-        foreach ($composerPluginNodes as $node) {
-            $plugins = isset($composerContent->$node) ? (array) $composerContent->$node : [];
-            $pluginsPaths = array_merge($pluginsPaths, array_filter($plugins, function ($pluginPath) use ($username) {
-                $data = explode('/', $pluginPath);
-                return $data[0] === $username;
-            }, ARRAY_FILTER_USE_KEY));
-        }
-
-        foreach ($pluginsPaths as $pluginPath => $plugin) {
-            $data = explode('/', $pluginPath);
-            if (isset($data[1])) {
-                $pluginsHandle[] = $data[1];
-            }
-        }
-
-        return $pluginsHandle;
     }
 
     /**

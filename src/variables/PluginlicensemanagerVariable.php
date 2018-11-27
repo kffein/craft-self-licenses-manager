@@ -32,11 +32,6 @@ class PluginlicensemanagerVariable
         return Pluginlicensemanager::getInstance()->pluginlicensemanagerService->getUnregisteredPlugins();
     }
 
-    public function pluginsHandleWithoutApiResult()
-    {
-        return Pluginlicensemanager::getInstance()->pluginlicensemanagerService->getPluginsHandleWithoutApiResult();
-    }
-
     public function settings()
     {
         return Pluginlicensemanager::getInstance()->getSettings();

@@ -25,6 +25,8 @@
 
 .pluginlicensemanager-plugin .plugin-info-icon{
     width: 50px;
+    display: flex;
+    align-items: center;
 }
     .pluginlicensemanager-plugin .plugin-info-icon img{
         height: 50px;
@@ -33,11 +35,21 @@
 .pluginlicensemanager-plugin .plugin-info-content{
     display: flex;
     flex-direction: column;
+    flex: 0.5;
     margin: 0 40px;
 }
      .pluginlicensemanager-plugin .plugin-info-content p{
          margin: 0;
      }
+
+     .pluginlicensemanager-plugin .short-description{
+        color: #8f98a3;
+     }
+
+.pluginlicensemanager-plugin .plugin-info-lightswitch{
+    display: flex;
+    align-items: center;
+}
 
 .pluginlicensemanager-plugin .btn.submit{
     margin-top: 20px;
