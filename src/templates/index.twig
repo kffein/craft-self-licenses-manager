@@ -21,7 +21,7 @@
 
 {% set docsUrl = "???" %}
 
-{% set title = "Plugin license manager" %}
+{% set title = craft.pluginlicensemanager.pluginName %}
 
 {% set pluginCpUrl = url('plugin-license-manager') %}
 
@@ -63,9 +63,17 @@
                     <hr />
 
                     {% for plugin in unregisteredPlugins %}
-                        {% set formName = 'pluginsHandle[' ~ plugin.handle ~']' %}
+                        {% set lightswitchFormName = 'pluginsHandle[' ~ plugin.handle ~']' %}
+                        {% set editionFormName = 'edition[' ~ plugin.handle ~']' %}
                         {% set isSwitchOn = requestPostPluginsHandle is not empty and requestPostPluginsHandle[plugin.handle] and requestPostPluginsHandle[plugin.handle] == '1' %}
-                        
+
+                        {% set editionOptions = {} %}
+                        {% for edition in plugin.editions %}
+                            {% set editionOptions = editionOptions|merge([{
+                                'label': edition.name,
+                                'value': edition.handle
+                            }]) %}
+                        {% endfor %}                       
                         
                         <div class="plugin-info">
                             
@@ -80,10 +88,21 @@
                                 <p class="short-description"><em>{{ plugin.shortDescription }}</em></p>
                             </div>
 
+                            <div class="plugin-info-editions">
+                                {{ forms.selectField({
+                                    id: "edition",
+                                    name: editionFormName,
+                                    label: "Editions",
+                                    required: true,
+                                    options: editionOptions,
+                                    value: editionOptions[0].value
+                                }) }}
+                            </div>
+
                             <div class="plugin-info-lightswitch">
                                 {{ forms.lightswitchField({
                                     id: plugin.handle,
-                                    name: formName,
+                                    name: lightswitchFormName,
                                     on: isSwitchOn,
                                 }) }}
                             </div>

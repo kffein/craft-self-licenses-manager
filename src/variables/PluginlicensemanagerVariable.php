@@ -37,6 +37,11 @@ class PluginlicensemanagerVariable
         return Pluginlicensemanager::getInstance()->getSettings();
     }
 
+    public function pluginName()
+    {
+        return Pluginlicensemanager::getInstance()->name;
+    }
+
     public function errors()
     {
         $flashKey = Pluginlicensemanager::getInstance()->pluginlicensemanagerService::SESSION_FLASH_KEY;

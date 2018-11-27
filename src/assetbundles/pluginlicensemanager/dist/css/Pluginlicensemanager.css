@@ -35,7 +35,7 @@
 .pluginlicensemanager-plugin .plugin-info-content{
     display: flex;
     flex-direction: column;
-    flex: 0.5;
+    flex: 0.3;
     margin: 0 40px;
 }
      .pluginlicensemanager-plugin .plugin-info-content p{
@@ -45,6 +45,10 @@
      .pluginlicensemanager-plugin .short-description{
         color: #8f98a3;
      }
+
+.pluginlicensemanager-plugin .plugin-info-editions{
+    margin-right: 40px;
+}
 
 .pluginlicensemanager-plugin .plugin-info-lightswitch{
     display: flex;

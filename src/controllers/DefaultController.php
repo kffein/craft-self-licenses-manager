@@ -42,6 +42,7 @@ class DefaultController extends Controller
         $pluginsHandles = [];
         $plugins = Craft::$app->request->getRequiredBodyParam('pluginsHandle');
         $plugins = array_filter($plugins);
+        $editions = Craft::$app->request->getRequiredBodyParam('edition');
 
         $success = [];
         $errors = [];
@@ -56,7 +57,9 @@ class DefaultController extends Controller
         }
 
         foreach ($pluginsHandles as $pluginHandle) {
-            if (Pluginlicensemanager::getInstance()->pluginlicensemanagerService->generateAndActivatePluginLicense($pluginHandle)) {
+            $editionHandle = $editions[$pluginHandle];
+
+            if (Pluginlicensemanager::getInstance()->pluginlicensemanagerService->generateAndActivatePluginLicense($pluginHandle, $editionHandle)) {
                 $success[] = $pluginHandle;
             } else {
                 $errors[] = $pluginHandle;

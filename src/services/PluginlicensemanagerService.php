@@ -63,6 +63,19 @@ class PluginlicensemanagerService extends Component
             return in_array($plugin['handle'], $allPluginsHandle);
         });
 
+        // Filter license needed plugins by validating existing editions prices
+        $plugins = array_filter($plugins, function ($plugin) {
+            $pluginNeedLicense = false;
+            $editions = $plugin['editions'];
+            foreach ($editions as $edition) {
+                if ($edition['price'] !== null || $edition['renewalPrice'] !== null) {
+                    $pluginNeedLicense = true;
+                    break;
+                }
+            }
+            return $pluginNeedLicense;
+        });
+
         // Filter out plugin with license status is invalid
         $unregisteredPlugins = array_filter($plugins, function ($plugin) use ($allPlugins) {
             return $allPlugins[$plugin['handle']]['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
@@ -70,12 +83,23 @@ class PluginlicensemanagerService extends Component
 
         return array_map(function ($plugin) {
             $plugin = (object) $plugin;
+
+            $editions = array_map(function ($edition) {
+                $edition = (object) $edition;
+                return [
+                    'name' => $edition->name,
+                    'handle' => $edition->handle,
+                    'isRenewal' => $edition->renewalPrice !== null
+                ];
+            }, $plugin->editions);
+
             return [
                 'name' => $plugin->name,
                 'handle' => $plugin->handle,
                 'version' => $plugin->version,
                 'iconUrl' => $plugin->iconUrl,
-                'shortDescription' => $plugin->shortDescription
+                'shortDescription' => $plugin->shortDescription,
+                'editions' => $editions
             ];
         }, $unregisteredPlugins);
     }
@@ -89,9 +113,9 @@ class PluginlicensemanagerService extends Component
      * @param string $pluginHandle
      * @return boolean
      */
-    public function generateAndActivatePluginLicense(string $pluginHandle) : bool
+    public function generateAndActivatePluginLicense(string $pluginHandle, string $editionHandle) : bool
     {
-        $result = $this->generateLicense($this->settings->licenseEmail, $pluginHandle);
+        $result = $this->generateLicense($this->settings->licenseEmail, $pluginHandle, $editionHandle);
 
         if (isset($result->message)) {
             return false;
@@ -154,10 +178,10 @@ class PluginlicensemanagerService extends Component
      * @param string $pluginHandle
      * @return object
      */
-    private function generateLicense(string $email, string $pluginHandle) : object
+    private function generateLicense(string $email, string $pluginHandle, string $editionHandle) : object
     {
         $options = [
-            'edition' => 'standard',
+            'edition' => $editionHandle,
             'plugin' => $pluginHandle,
             'email' => $email
           ];
