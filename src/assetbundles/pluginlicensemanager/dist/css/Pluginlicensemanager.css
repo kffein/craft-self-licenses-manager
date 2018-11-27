@@ -1,0 +1,44 @@
+/**
+ * plugin-license-manager plugin for Craft CMS
+ *
+ * plugin-license-manager CSS
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2018 Kffein
+ * @link      kffein.com
+ * @package   Pluginlicensemanager
+ * @since     1.0.0
+ */
+
+.pluginlicensemanager-plugin{
+
+}
+
+.pluginlicensemanager-plugin .subtitle{
+    margin-bottom: 40px;
+}
+
+.pluginlicensemanager-plugin .plugin-info{
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.pluginlicensemanager-plugin .plugin-info-icon{
+    width: 50px;
+}
+    .pluginlicensemanager-plugin .plugin-info-icon img{
+        height: 50px;
+    }
+
+.pluginlicensemanager-plugin .plugin-info-content{
+    display: flex;
+    flex-direction: column;
+    margin: 0 40px;
+}
+     .pluginlicensemanager-plugin .plugin-info-content p{
+         margin: 0;
+     }
+
+.pluginlicensemanager-plugin .btn.submit{
+    margin-top: 20px;
+}

@@ -57,12 +57,13 @@ class Pluginlicensemanager extends Plugin
      */
     public function init()
     {
+        // Quit if request is not a CP request
+        if (!Craft::$app->request->isCpRequest) {
+            return null;
+        }
+
         parent::init();
         self::$plugin = $this;
-
-        //\Craft::dd(Craft::$app->api->getPluginStoreData());
-
-        //\Craft::dd(Pluginlicensemanager::getInstance()->pluginlicensemanagerService->getUnregisteredPlugins());
 
         Event::on(
             UrlManager::class,

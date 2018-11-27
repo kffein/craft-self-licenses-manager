@@ -17,6 +17,8 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
+{% do view.registerAssetBundle("kffein\\pluginlicensemanager\\assetbundles\\pluginlicensemanager\\PluginlicensemanagerAsset") %}
+
 {% set docsUrl = "???" %}
 
 {% set title = "Plugin license manager" %}
@@ -31,45 +33,6 @@
 {% endset %}
 
 {% set content %}
-
-    <style>
-
-    .pluginlicensemanager-plugin{
-
-    }
-
-    .pluginlicensemanager-plugin .subtitle{
-        margin-bottom: 40px;
-    }
-
-    .pluginlicensemanager-plugin .plugin-info{
-        display: flex;
-        margin-bottom: 20px;
-    }
-
-    .pluginlicensemanager-plugin .plugin-info-icon{
-        
-    }
-        .pluginlicensemanager-plugin .plugin-info-icon img{
-            height: 50px;
-        }
-
-    .pluginlicensemanager-plugin .plugin-info-content{
-        display: flex;
-        flex-direction: column;
-        margin: 0 40px;
-    }
-         .pluginlicensemanager-plugin .plugin-info-content p{
-             margin: 0;
-         }
-
-    .pluginlicensemanager-plugin .btn.submit{
-        margin-top: 20px;
-    }
-
-    
-    </style>
-
 
     <div class="pluginlicensemanager-plugin">
 
