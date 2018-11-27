@@ -41,6 +41,12 @@ class PluginlicensemanagerService extends Component
 
         // Get own plugins and return the handle
         $ownPlugins = $this->getPluginsByDeveloperName();
+
+        if (empty($ownPlugins)) {
+            Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__nopluginsapifound'));
+            return [];
+        }
+
         $ownPluginsHandle = array_map(function ($plugin) {
             return $plugin['handle'];
         }, $ownPlugins);

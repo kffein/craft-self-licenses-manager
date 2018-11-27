@@ -39,5 +39,6 @@ return [
     'errors__email' => 'Invalid email address. Please submit a valid email address.',
     'errors__nopluginsselected' => 'No plugins selected. Please select at least one plugin.',
     'errors__forplugins' => 'Errors for plugin license : ',
+    'errors__nopluginsapifound' => 'No plugins found for the developer name defined in the settings page. Please validate settings.',
     'success__forplugins' => 'Success for plugin license : '
 ];
