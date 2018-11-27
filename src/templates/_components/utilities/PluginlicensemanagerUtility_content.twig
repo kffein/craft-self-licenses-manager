@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * plugin-license-manager plugin for Craft CMS
+ *
+ * PluginlicensemanagerUtility Utility Content
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2018 Kffein
+ * @link      kffein.com
+ * @package   Pluginlicensemanager
+ * @since     1.0.0
+ */
+#}
+
+<h1>PluginlicensemanagerUtility</h1>
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@kffein/pluginlicensemanager/assetbundles/pluginlicensemanagerutilityutility/dist', true) ~ '/img/PluginlicensemanagerUtility-icon.svg' %}
+
+<img src="{{ iconUrl }}" height="64" width="64" />
+
+<p>Your Utility content goes here</p>
+
+<p>{{ someVar }}</p>

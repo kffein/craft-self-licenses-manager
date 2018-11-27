@@ -1,0 +1,30 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * plugin-license-manager plugin for Craft CMS 3.x
+ *
+ * plugin-license-manager Settings.twig
+ *
+ * @author    Kffein
+ * @copyright Copyright (c) 2018 Kffein
+ * @link      kffein.com
+ * @package   Pluginlicensemanager
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: 'Username',
+    id: 'username',
+    name: 'username',
+    value: settings['username']})
+}}
+
+{{ forms.textField({
+    label: 'Api key',
+    id: 'apiKey',
+    name: 'apiKey',
+    value: settings['apiKey']})
+}}

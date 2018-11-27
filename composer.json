@@ -1,0 +1,43 @@
+{
+    "name": "kffein/plugin-license-manager",
+    "description": "Plugin license manager",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "plugin-license-manager"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kffein",
+            "homepage": "kffein.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "kffein\\pluginlicensemanager\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Plugin license manager",
+        "handle": "plugin-license-manager",
+        "hasCpSettings": true,
+        "hasCpSection": true,
+        "changelogUrl": "???",
+        "components": {
+            "pluginlicensemanagerService": "kffein\\pluginlicensemanager\\services\\PluginlicensemanagerService"
+        },
+        "class": "kffein\\pluginlicensemanager\\Pluginlicensemanager"
+    }
+}
