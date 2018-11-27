@@ -17,7 +17,7 @@ return [
     'plugin-license-manager plugin loaded' => 'plugin-license-manager plugin loaded',
 
     'pluginName' => 'Plugin license manager',
-    'index__title' => 'Generate and set license keys for plugins',
+    'index__title' => 'Generate and set license for plugins',
     'index__form__email__label' => 'Email',
     'index__form__email__desc' => 'Email associated with the license',
     'index__form__api__title' => 'Plugins detected by Craft ID api',

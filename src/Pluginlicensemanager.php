@@ -62,6 +62,8 @@ class Pluginlicensemanager extends Plugin
 
         //\Craft::dd(Craft::$app->api->getPluginStoreData());
 
+        //\Craft::dd(Pluginlicensemanager::getInstance()->pluginlicensemanagerService->getUnregisteredPlugins());
+
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,

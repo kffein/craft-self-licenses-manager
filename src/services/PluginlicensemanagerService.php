@@ -35,47 +35,85 @@ class PluginlicensemanagerService extends Component
         $this->settings = Pluginlicensemanager::$plugin->getSettings();
     }
 
+    public function getUnregisteredPlugins() : array
+    {
+        $unregisteredPluginsData = [];
+
+        // Get own plugins and return the handle
+        $ownPlugins = $this->getPluginsByDeveloperName();
+        $ownPluginsHandle = array_map(function ($plugin) {
+            return $plugin['handle'];
+        }, $ownPlugins);
+
+        // Return the plugins list from the craft DB
+        $allPlugins = Craft::$app->plugins->allPluginInfo;
+        $allPluginsHandle = [];
+        foreach ($allPlugins as $plugin) {
+            $allPluginsHandle[] = $plugin['moduleId'];
+        }
+
+        // Filter plugins DB list to return only own plugin from the API
+        $plugins = array_filter($ownPlugins, function ($plugin) use ($allPluginsHandle) {
+            return in_array($plugin['handle'], $allPluginsHandle);
+        });
+
+        // Filter out plugin with license status is invalid
+        $unregisteredPlugins = array_filter($plugins, function ($plugin) use ($allPlugins) {
+            return $allPlugins[$plugin['handle']]['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
+        });
+
+        return array_map(function ($plugin) {
+            $plugin = (object) $plugin;
+            return [
+                'name' => $plugin->name,
+                'handle' => $plugin->handle,
+                'version' => $plugin->version,
+                'iconUrl' => $plugin->iconUrl,
+            ];
+        }, $unregisteredPlugins);
+    }
+
     /**
      * Return the list of plugins accessible via Craft id api
      * that is not registered with license
      *
      * @return array
      */
-    public function getUnregisteredPlugins() : array
-    {
-        $unregisteredPluginsHandle = [];
+    // public function getUnregisteredPlugins() : array
+    // {
+    //     $unregisteredPluginsHandle = [];
 
-        // Fetch the Api to return uniq plugins handle
-        $ownPluginsHandle = $this->getPluginsHandle();
+    //     // Fetch the Api to return uniq plugins handle
+    //     $ownPluginsHandle = $this->getPluginsHandle();
 
-        // If API call has error, error set to flash and quit method
-        if ($this->hasError()) {
-            return null;
-        }
+    //     // If API call has error, error set to flash and quit method
+    //     if ($this->hasError()) {
+    //         return null;
+    //     }
 
-        // Return the plugins list from the craft DB
-        $allPlugins = Craft::$app->plugins->allPluginInfo;
+    //     // Return the plugins list from the craft DB
+    //     $allPlugins = Craft::$app->plugins->allPluginInfo;
 
-        // Filter plugins DB list to return only own plugin from the API
-        $plugins = array_filter($allPlugins, function ($pluginHandle) use ($ownPluginsHandle) {
-            return in_array($pluginHandle, $ownPluginsHandle);
-        }, ARRAY_FILTER_USE_KEY);
+    //     // Filter plugins DB list to return only own plugin from the API
+    //     $plugins = array_filter($allPlugins, function ($pluginHandle) use ($ownPluginsHandle) {
+    //         return in_array($pluginHandle, $ownPluginsHandle);
+    //     }, ARRAY_FILTER_USE_KEY);
 
-        // Filter out plugin with license status is invalid
-        $unregisteredPlugins = array_filter($plugins, function ($plugin) {
-            return $plugin['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
-        });
+    //     // Filter out plugin with license status is invalid
+    //     $unregisteredPlugins = array_filter($plugins, function ($plugin) {
+    //         return $plugin['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
+    //     });
 
-        // Loop plugins and return name + handle data
-        foreach ($unregisteredPlugins as $plugin) {
-            $unregisteredPluginsHandle[] = [
-                'handle' => $plugin['moduleId'],
-                'name' => $plugin['name']
-            ];
-        }
+    //     // Loop plugins and return name + handle data
+    //     foreach ($unregisteredPlugins as $plugin) {
+    //         $unregisteredPluginsHandle[] = [
+    //             'handle' => $plugin['moduleId'],
+    //             'name' => $plugin['name']
+    //         ];
+    //     }
 
-        return $unregisteredPluginsHandle;
-    }
+    //     return $unregisteredPluginsHandle;
+    // }
 
     /**
      * Generate the license with the Craft id API
@@ -86,9 +124,9 @@ class PluginlicensemanagerService extends Component
      * @param string $pluginHandle
      * @return boolean
      */
-    public function generateAndActivatePluginLicense(string $email, string $pluginHandle) : bool
+    public function generateAndActivatePluginLicense(string $pluginHandle) : bool
     {
-        $result = $this->generateLicense($email, $pluginHandle);
+        $result = $this->generateLicense($this->settings->licenseEmail, $pluginHandle);
 
         if (isset($result->message)) {
             return false;
@@ -141,6 +179,17 @@ class PluginlicensemanagerService extends Component
     {
         $result = $this->getLicenses();
         return (!isset($result->message));
+    }
+
+    private function getPluginsByDeveloperName() : array
+    {
+        $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
+        $apiPlugins = $apiPluginsData->plugins;
+        $developerName = $this->settings->developerName;
+        $developerPlugins = array_values(array_filter($apiPlugins, function ($plugin) use ($developerName) {
+            return strtolower($plugin['developerName']) === strtolower($developerName);
+        }));
+        return $developerPlugins;
     }
 
     /**

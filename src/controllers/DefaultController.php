@@ -40,17 +40,11 @@ class DefaultController extends Controller
     public function actionGenerate()
     {
         $pluginsHandles = [];
-        $email = Craft::$app->request->getRequiredBodyParam('email');
         $plugins = Craft::$app->request->getRequiredBodyParam('pluginsHandle');
         $plugins = array_filter($plugins);
 
         $success = [];
         $errors = [];
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__email'));
-            return $this->renderTemplate('plugin-license-manager/index');
-        }
 
         if (empty($plugins)) {
             Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__nopluginsselected'));
@@ -62,7 +56,7 @@ class DefaultController extends Controller
         }
 
         foreach ($pluginsHandles as $pluginHandle) {
-            if (Pluginlicensemanager::getInstance()->pluginlicensemanagerService->generateAndActivatePluginLicense($email, $pluginHandle)) {
+            if (Pluginlicensemanager::getInstance()->pluginlicensemanagerService->generateAndActivatePluginLicense($pluginHandle)) {
                 $success[] = $pluginHandle;
             } else {
                 $errors[] = $pluginHandle;

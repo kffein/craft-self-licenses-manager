@@ -28,6 +28,8 @@ class Settings extends Model
      */
     public $username;
     public $apiKey;
+    public $developerName;
+    public $licenseEmail;
 
     // Public Methods
     // =========================================================================
@@ -38,7 +40,8 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['username', 'apiKey'], 'string'],
+            [['username', 'apiKey', 'developerName'], 'string'],
+            ['licenseEmail', 'email']
         ];
     }
 }

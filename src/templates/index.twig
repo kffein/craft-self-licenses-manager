@@ -13,6 +13,7 @@
  */
 #}
 
+
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
@@ -31,88 +32,116 @@
 
 {% set content %}
 
-    {% set pluginErrors = craft.pluginlicensemanager.errors %}
-    {% set unregisteredPlugins = craft.pluginlicensemanager.unregisteredPlugins %}
-    {% set noApiLicensePlugins = craft.pluginlicensemanager.pluginsHandleWithoutApiResult %}
-    {% set settings = craft.pluginlicensemanager.settings %}
-    {% set requestPostPluginsHandle = craft.request.getPost('pluginsHandle') ?? [] %}
+    <style>
 
-    {% if pluginErrors %}
-        {% switch pluginErrors %}
-            {% case "Invalid Credentials" %}
-               {{'index__errors__invalidCredential'|t('plugin-license-manager'|raw)}}
-        {% endswitch %}
-       
+    .pluginlicensemanager-plugin{
 
-    {% else %}
+    }
 
-        <h2>{{'index__title'|t('plugin-license-manager')}}</h2>
-        <p class="textline"></p>
+    .pluginlicensemanager-plugin .subtitle{
+        margin-bottom: 40px;
+    }
 
-        {% if unregisteredPlugins|length or noApiLicensePlugins|length %}
+    .pluginlicensemanager-plugin .plugin-info{
+        display: flex;
+        margin-bottom: 20px;
+    }
 
-            <form method="post" data-saveshortcut data-confirm-unload action="{{ actionUrl('plugin-license-manager/default/generate') }}">
-                {{ csrfInput() }}
-                {{ redirectInput('plugin-license-manager') }}
+    .pluginlicensemanager-plugin .plugin-info-icon{
+        
+    }
+        .pluginlicensemanager-plugin .plugin-info-icon img{
+            height: 50px;
+        }
 
-                {{ forms.textField({
-                    label: 'index__form__email__label'|t('plugin-license-manager'),
-                    instructions: 'index__form__email__desc'|t('plugin-license-manager'),
-                    id: 'email',
-                    name: 'email',
-                    value: craft.request.getPost('email'),
-                    required: true
-                }) }}
+    .pluginlicensemanager-plugin .plugin-info-content{
+        display: flex;
+        flex-direction: column;
+        margin: 0 40px;
+    }
+         .pluginlicensemanager-plugin .plugin-info-content p{
+             margin: 0;
+         }
 
-                <hr />
+    .pluginlicensemanager-plugin .btn.submit{
+        margin-top: 20px;
+    }
+
+    
+    </style>
 
 
-                {% if unregisteredPlugins|length %}
+    <div class="pluginlicensemanager-plugin">
 
-                    <h3>{{'index__form__api__title'|t('plugin-license-manager')}}</h3>
+
+        {% set pluginErrors = craft.pluginlicensemanager.errors %}
+        {% set unregisteredPlugins = craft.pluginlicensemanager.unregisteredPlugins %}
+        {% set settings = craft.pluginlicensemanager.settings %}
+        {% set requestPostPluginsHandle = craft.request.getPost('pluginsHandle') ?? [] %}
+
+        {% if pluginErrors %}
+            {% switch pluginErrors %}
+                {% case "Invalid Credentials" %}
+                {{'index__errors__invalidCredential'|t('plugin-license-manager'|raw)}}
+            {% endswitch %}
+        
+
+        {% else %}
+
+            <h2 class="subtitle">{{'index__title'|t('plugin-license-manager')}}</h2>
+
+
+            {% if unregisteredPlugins|length %}
+
+                <form method="post" data-saveshortcut data-confirm-unload action="{{ actionUrl('plugin-license-manager/default/generate') }}">
+                    {{ csrfInput() }}
+                    {{ redirectInput('plugin-license-manager') }}
 
                     {% for plugin in unregisteredPlugins %}
                         {% set formName = 'pluginsHandle[' ~ plugin.handle ~']' %}
                         {% set isSwitchOn = requestPostPluginsHandle is not empty and requestPostPluginsHandle[plugin.handle] and requestPostPluginsHandle[plugin.handle] == '1' %}
-                        {{ forms.lightswitchField({
-                            label: plugin.name,
-                            id: plugin.handle,
-                            name: formName,
-                            on: isSwitchOn,
-                        }) }}
+                        
+                        
+                        <div class="plugin-info">
+                            
+                            <div class="plugin-info-icon">
+                                <img src="{{plugin.iconUrl}}" class="plugin-icon" />
+                            </div>
+
+                            <div class="plugin-info-content">
+                                <p><strong>{{plugin.name}}</strong></p>
+                                <p>{{plugin.handle}}</p>
+                                <p>{{plugin.version}}</p>
+                            </div>
+
+                            <div class="plugin-info-lightswitch">
+                                {{ forms.lightswitchField({
+                                    id: plugin.handle,
+                                    name: formName,
+                                    on: isSwitchOn,
+                                }) }}
+                            </div>
+
+                            
+                        </div>
+
                     {% endfor %}
 
-                    <hr />
+                    <input type="submit" class="btn submit" value="{{'index__form__button__label'|t('plugin-license-manager')}}">
+                    
 
-                {% endif %}
+                </form>
 
-                
-                <h3>{{'index__form__composer__title'|t('plugin-license-manager')}} {{ settings.username }}</h3>
-                <p><em>{{'index__form__composer__subtitle'|t('plugin-license-manager')|raw}}</em></p>
+            {% else %}
 
-                {% for pluginHandle in noApiLicensePlugins %}
-                    {% set formName = 'pluginsHandle[' ~ pluginHandle ~']' %}
-                    {% set isSwitchOn = requestPostPluginsHandle is not empty and requestPostPluginsHandle[pluginHandle] and requestPostPluginsHandle[pluginHandle] == '1' %}
-                    {{ forms.lightswitchField({
-                        label: pluginHandle,
-                        id: pluginHandle,
-                        name: formName,
-                        on: isSwitchOn
-                    }) }}
-                {% endfor %}
+                <p>{{'index__allpluginactivated'|t('plugin-license-manager')}}</p>
 
-                <input type="submit" class="btn submit" value="{{'index__form__button__label'|t('plugin-license-manager')}}">
+            {% endif %}
 
-            </form>
-
-        {% else %}
-
-            {{'index__form__button__label'|t('plugin-license-manager')}}
 
         {% endif %}
 
-
-    {% endif %}
+    </div>
 
     
 

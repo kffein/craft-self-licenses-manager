@@ -17,6 +17,7 @@
 
 {{ forms.textField({
     label: 'Username',
+    instructions: 'Username for the Craft id API', 
     id: 'username',
     name: 'username',
     value: settings['username']})
@@ -24,7 +25,28 @@
 
 {{ forms.textField({
     label: 'Api key',
+    instructions: 'Token for the Craft id API', 
     id: 'apiKey',
     name: 'apiKey',
     value: settings['apiKey']})
 }}
+
+{{ forms.textField({
+    label: 'Developer name',
+    instructions: 'Developer name appearing in the Developer > Profile section of the Craft id API panel', 
+    id: 'developerName',
+    name: 'developerName',
+    value: settings['developerName']})
+}}
+
+{{ forms.textField({
+    label: 'License email',
+    instructions: 'Email for generate license', 
+    id: 'licenseEmail',
+    name: 'licenseEmail',
+    value: settings['licenseEmail']})
+}}
+
+
+
+
