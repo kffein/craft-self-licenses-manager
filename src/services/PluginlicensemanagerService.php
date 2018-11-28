@@ -36,6 +36,66 @@ class PluginlicensemanagerService extends Component
         $this->apiEndPoint = Craft::$app->pluginStore->craftApiEndpoint . '/';
     }
 
+    /**
+     * Generate the license with the Craft id API
+     * Set the license to the plugin
+     * Change the plugin status to valid
+     *
+     * @param string $email
+     * @param string $pluginHandle
+     * @return boolean
+     */
+    public function generateAndActivatePluginLicense(string $pluginHandle, string $editionHandle) : bool
+    {
+        $result = $this->generateLicense($this->settings->licenseEmail, $pluginHandle, $editionHandle);
+
+        if (isset($result->message)) {
+            return false;
+        }
+
+        $licenseKey = $result->license->key;
+
+        Craft::$app->plugins->setPluginLicenseKey($pluginHandle, $licenseKey);
+        Craft::$app->plugins->setPluginLicenseKeyStatus($pluginHandle, 'valid');
+
+        return true;
+    }
+
+    /**
+     * Get the developer information
+     *
+     * @return array
+     */
+    public function getDeveloperInfo() : ?array
+    {
+        $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
+        $apiPlugins = $apiPluginsData->plugins;
+        $pluginForDeveloper = null;
+        $developerName = $this->settings->developerName;
+        foreach ($apiPlugins as $plugin) {
+            if (strtolower($plugin['developerName']) === strtolower($developerName)) {
+                $pluginForDeveloper = $plugin;
+                break;
+            }
+        }
+        if ($pluginForDeveloper === null) {
+            return null;
+        }
+
+        $developerId = $pluginForDeveloper['developerId'];
+        $developerInfo = Craft::$app->api->getDeveloper($developerId);
+        return (!isset($developerInfo->error)) ? $developerInfo : null;
+    }
+
+    /**
+     * Return the plugins list for the developer defined in settings
+     * Filter plugins that exist on DB (register in composer)
+     * Filter plugins that need a license (Not free)
+     * Filter plugins with no license yet
+     * Format the data for twig template
+     *
+     * @return array
+     */
     public function getUnregisteredPlugins() : array
     {
         $unregisteredPluginsData = [];
@@ -86,114 +146,18 @@ class PluginlicensemanagerService extends Component
     }
 
     /**
-     * Generate the license with the Craft id API
-     * Set the license to the plugin
-     * Change the plugin status to valid
-     *
-     * @param string $email
-     * @param string $pluginHandle
-     * @return boolean
-     */
-    public function generateAndActivatePluginLicense(string $pluginHandle, string $editionHandle) : bool
-    {
-        $result = $this->generateLicense($this->settings->licenseEmail, $pluginHandle, $editionHandle);
-
-        if (isset($result->message)) {
-            return false;
-        }
-
-        $licenseKey = $result->license->key;
-
-        Craft::$app->plugins->setPluginLicenseKey($pluginHandle, $licenseKey);
-        Craft::$app->plugins->setPluginLicenseKeyStatus($pluginHandle, 'valid');
-
-        return true;
-    }
-
-    /**
      * Validate if settings is valid by request Craft id api
      *
      * @return boolean
      */
     public function validateSettingsWithApi() : bool
     {
-        $result = $this->getLicenses();
+        $result = $this->getLicenses(1, 1);
         return (!isset($result->message));
     }
 
-    public function getDeveloperInfo()
-    {
-        $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
-        $apiPlugins = $apiPluginsData->plugins;
-        $pluginForDeveloper = null;
-        $developerName = $this->settings->developerName;
-        foreach ($apiPlugins as $plugin) {
-            if (strtolower($plugin['developerName']) === strtolower($developerName)) {
-                $pluginForDeveloper = $plugin;
-                break;
-            }
-        }
-        if ($pluginForDeveloper === null) {
-            return null;
-        }
-
-        $developerId = $pluginForDeveloper['developerId'];
-        $developerInfo = Craft::$app->api->getDeveloper($developerId);
-        return (!isset($developerInfo->error)) ? $developerInfo : null;
-    }
-
-    /**
-     * Get the complete plugins list
-     * Filter plugins with the same developerName as the settings (case-insensitive)
-     *
-     * @return array
-     */
-    private function getPluginsByDeveloperName() : array
-    {
-        $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
-        $apiPlugins = $apiPluginsData->plugins;
-        $developerName = $this->settings->developerName;
-        $developerPlugins = array_values(array_filter($apiPlugins, function ($plugin) use ($developerName) {
-            return strtolower($plugin['developerName']) === strtolower($developerName);
-        }));
-        return $developerPlugins;
-    }
-
-    /**
-     * Fetch licenses with Craft license API
-     *
-     * @param integer $page
-     * @return array
-     */
-    private function getLicenses(int $page = 1) : object
-    {
-        $url = $this->apiEndPoint . 'plugin-licenses?page=' . $page;
-        $result = $this->makeRequest($url, [], 'GET');
-        $this->validateRequest($result);
-        return $result;
-    }
-
-    /**
-     * Generate license with Craft id API
-     *
-     * @param string $email
-     * @param string $pluginHandle
-     * @return object
-     */
-    private function generateLicense(string $email, string $pluginHandle, string $editionHandle) : object
-    {
-        $options = [
-            'edition' => $editionHandle,
-            'plugin' => $pluginHandle,
-            'email' => $email
-          ];
-
-        $url = $this->apiEndPoint . 'plugin-licenses';
-
-        $result = $this->makeRequest($url, $options);
-
-        return $result;
-    }
+    // Private Methods
+    // =========================================================================
 
     /**
      * Format plugin data for twig template usage
@@ -227,16 +191,57 @@ class PluginlicensemanagerService extends Component
     }
 
     /**
-     * Valid API call response
+     * Generate license with Craft id API
      *
-     * @param [type] $response
-     * @return void
+     * @param string $email
+     * @param string $pluginHandle
+     * @return object
      */
-    private function validateRequest($response) : void
+    private function generateLicense(string $email, string $pluginHandle, string $editionHandle) : object
     {
-        if (isset($response->message)) {
-            Craft::$app->getSession()->set(self::SESSION_FLASH_KEY, $response->message);
-        }
+        $options = [
+            'edition' => $editionHandle,
+            'plugin' => $pluginHandle,
+            'email' => $email
+          ];
+
+        $url = $this->apiEndPoint . 'plugin-licenses';
+
+        $result = $this->makeRequest($url, $options);
+
+        return $result;
+    }
+
+    /**
+    * Fetch licenses with Craft license API
+    *
+    * @param integer $page
+    * @return array
+    */
+    private function getLicenses(int $page = 1, int $perPage = 100) : object
+    {
+        $params = "?plugin-licenses?page={$page}&perPage={$perPage}";
+        $url = $this->apiEndPoint . 'plugin-licenses' . $params;
+        $result = $this->makeRequest($url, [], 'GET');
+        $this->validateRequest($result);
+        return $result;
+    }
+
+    /**
+     * Get the complete plugins list
+     * Filter plugins with the same developerName as the settings (case-insensitive)
+     *
+     * @return array
+     */
+    private function getPluginsByDeveloperName() : array
+    {
+        $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
+        $apiPlugins = $apiPluginsData->plugins;
+        $developerName = $this->settings->developerName;
+        $developerPlugins = array_values(array_filter($apiPlugins, function ($plugin) use ($developerName) {
+            return strtolower($plugin['developerName']) === strtolower($developerName);
+        }));
+        return $developerPlugins;
     }
 
     /**
@@ -280,5 +285,18 @@ class PluginlicensemanagerService extends Component
         curl_close($ch);
 
         return json_decode($output);
+    }
+
+    /**
+     * Valid API call response
+     *
+     * @param [type] $response
+     * @return void
+     */
+    private function validateRequest($response) : void
+    {
+        if (isset($response->message)) {
+            Craft::$app->getSession()->set(self::SESSION_FLASH_KEY, $response->message);
+        }
     }
 }
