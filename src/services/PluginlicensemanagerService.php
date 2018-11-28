@@ -82,27 +82,7 @@ class PluginlicensemanagerService extends Component
             return $allPlugins[$plugin['handle']]['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
         });
 
-        return array_map(function ($plugin) {
-            $plugin = (object) $plugin;
-
-            $editions = array_map(function ($edition) {
-                $edition = (object) $edition;
-                return [
-                    'name' => $edition->name,
-                    'handle' => $edition->handle,
-                    'isRenewal' => $edition->renewalPrice !== null
-                ];
-            }, $plugin->editions);
-
-            return [
-                'name' => $plugin->name,
-                'handle' => $plugin->handle,
-                'version' => $plugin->version,
-                'iconUrl' => $plugin->iconUrl,
-                'shortDescription' => $plugin->shortDescription,
-                'editions' => $editions
-            ];
-        }, $unregisteredPlugins);
+        return $this->formatPluginData($unregisteredPlugins);
     }
 
     /**
@@ -213,6 +193,37 @@ class PluginlicensemanagerService extends Component
         $result = $this->makeRequest($url, $options);
 
         return $result;
+    }
+
+    /**
+     * Format plugin data for twig template usage
+     *
+     * @param array $plugins
+     * @return array
+     */
+    private function formatPluginData(array $plugins) : array
+    {
+        return array_map(function ($plugin) {
+            $plugin = (object) $plugin;
+
+            $editions = array_map(function ($edition) {
+                $edition = (object) $edition;
+                return [
+                    'name' => $edition->name,
+                    'handle' => $edition->handle,
+                    'isRenewal' => $edition->renewalPrice !== null
+                ];
+            }, $plugin->editions);
+
+            return [
+                'name' => $plugin->name,
+                'handle' => $plugin->handle,
+                'version' => $plugin->version,
+                'iconUrl' => $plugin->iconUrl,
+                'shortDescription' => $plugin->shortDescription,
+                'editions' => $editions
+            ];
+        }, $plugins);
     }
 
     /**
