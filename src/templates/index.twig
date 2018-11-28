@@ -46,7 +46,7 @@
         {% if pluginErrors %}
             {% switch pluginErrors %}
                 {% case "Invalid Credentials" %}
-                {{'index__errors__invalidCredential'|t('plugin-license-manager'|raw)}}
+                {{'index__errors__invalidCredential'|t('plugin-license-manager', [], i18nlocale|raw)}}
             {% endswitch %}
         
 

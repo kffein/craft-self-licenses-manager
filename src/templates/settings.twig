@@ -15,9 +15,11 @@
 
 {% import "_includes/forms" as forms %}
 
+{% set i18nlocale = 'en' %}
+
 {{ forms.textField({
-    label: 'settings__username__label'|t('plugin-license-manager'),
-    instructions: 'settings__username__instructions'|t('plugin-license-manager'), 
+    label: 'settings__username__label'|t('plugin-license-manager', [], i18nlocale),
+    instructions: 'settings__username__instructions'|t('plugin-license-manager', [], i18nlocale), 
     id: 'username',
     name: 'username',
     required: true,
@@ -25,8 +27,8 @@
 }}
 
 {{ forms.textField({
-    label: 'settings__apikey__label'|t('plugin-license-manager'),
-    instructions: 'settings__apikey__instructions'|t('plugin-license-manager'),  
+    label: 'settings__apikey__label'|t('plugin-license-manager', [], i18nlocale),
+    instructions: 'settings__apikey__instructions'|t('plugin-license-manager', [], i18nlocale),  
     id: 'apiKey',
     name: 'apiKey',
     required: true,
@@ -34,8 +36,8 @@
 }}
 
 {{ forms.textField({
-    label: 'settings__developername__label'|t('plugin-license-manager'),
-    instructions: 'settings__developername__instructions'|t('plugin-license-manager'),  
+    label: 'settings__developername__label'|t('plugin-license-manager', [], i18nlocale),
+    instructions: 'settings__developername__instructions'|t('plugin-license-manager', [], i18nlocale),  
     id: 'developerName',
     name: 'developerName',
     required: true,
@@ -43,8 +45,8 @@
 }}
 
 {{ forms.textField({
-    label: 'settings__email__label'|t('plugin-license-manager'),
-    instructions: 'settings__email__instructions'|t('plugin-license-manager'),  
+    label: 'settings__email__label'|t('plugin-license-manager', [], i18nlocale),
+    instructions: 'settings__email__instructions'|t('plugin-license-manager', [], i18nlocale),  
     id: 'licenseEmail',
     name: 'licenseEmail',
     required: true,

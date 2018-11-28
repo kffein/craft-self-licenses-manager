@@ -1,8 +1,12 @@
-# plugin-license-manager plugin for Craft CMS 3.x
+# Self licenses manager plugin for Craft CMS 3.x
 
-Plugin license manager
+![Screenshot](resources/img/header.png)
 
-![Screenshot](resources/img/plugin-logo.png)
+Plugin for plugins developer that auto-generate license for own plugin. No more needs to call the Craftnet API to receive a license and to manually fill the license field for each plugin. This solve the problem for developer who want to use their own licensed plugin in their own project. 
+
+- Before, you have to install the plugin, generate a license with the Craftnet API, go to the plugins settings page, enter the license code.
+
+- Thanks to this plugin, you select the desired plugins and click a button.
 
 ## Requirements
 
@@ -10,34 +14,38 @@ This plugin requires Craft CMS 3.0.0-beta.23 or later.
 
 ## Installation
 
-To install the plugin, follow these instructions.
+To install Self licenses manager, follow these steps:
 
-1. Open your terminal and go to your Craft project:
+1. Install with Composer via composer require kffein/craft-self-license-manager from your project directory
+2. Install plugin in the Craft Control Panel under Settings > Plugins
 
-        cd /path/to/project
+Or
 
-2. Then tell Composer to load the plugin:
+You can also install Self licenses manager via the Plugin Store in the Craft AdminCP.
 
-        composer require /plugin-license-manager
+## Configuration
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for plugin-license-manager.
+First step you'll need to configure the settings under Settings > Plugins > plugin-license-manager > settings.
 
-## plugin-license-manager Overview
+Fill the required fields with the informations found on https://id.craftcms.com 
 
--Insert text here-
+- Username: Account > Settings > Account Settings > Username
+- Api key: Developer > Settings > API Token
+- Developer name: Developer > Profile > Developer Name
+- License email: The email associated with the generated license
 
-## Configuring plugin-license-manager
+![Screenshot](resources/img/settings.png)
 
--Insert text here-
+On save, theses informations will be validate with the Craftnet API for validation. If informations is correct, you'll be redirect to the license plugin page.
 
-## Using plugin-license-manager
+## License generation
 
--Insert text here-
+![Screenshot](resources/img/licenses.png)
 
-## plugin-license-manager Roadmap
+All the plugins associated with the setting developer name will be listed.
 
-Some things to do, and ideas for potential features:
+Note : Only registered CraftID plugins that required license will be shown.
 
-* Release it
+To generate a license, turn on the lightswitch for the selected plugins and click on save button.
 
-Brought to you by [Kffein](kffein.com)
+Each plugins selected will fetch a license with the Craftnet API and the license will be auto-register with the plugins.
