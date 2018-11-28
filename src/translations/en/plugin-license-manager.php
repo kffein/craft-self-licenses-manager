@@ -39,5 +39,14 @@ return [
     'errors__email' => 'Invalid email address. Please submit a valid email address.',
     'errors__nopluginsselected' => 'No plugins selected. Please select at least one plugin.',
     'errors__forplugins' => 'Errors for plugin license : ',
-    'success__forplugins' => 'Success for plugin license : '
+    'errors__nopluginsapifound' => 'No plugins found for the developer name defined in the settings page. Please validate settings.',
+    'success__forplugins' => 'Success for plugin license : ',
+    'settings__username__label' => 'Username',
+    'settings__username__instructions' => 'Username for the Craft id API',
+    'settings__apikey__label' => 'Api key',
+    'settings__apikey__instructions' => 'Token for the Craft id API',
+    'settings__developername__label' => 'Developer name',
+    'settings__developername__instructions' => 'Developer name appearing in the Developer > Profile section of the Craft id API panel',
+    'settings__email__label' => 'License email',
+    'settings__email__instructions' => 'Email for generate license',
 ];

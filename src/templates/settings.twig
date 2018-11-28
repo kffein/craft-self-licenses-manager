@@ -16,34 +16,38 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-    label: 'Username',
-    instructions: 'Username for the Craft id API', 
+    label: 'settings__username__label'|t('plugin-license-manager'),
+    instructions: 'settings__username__instructions'|t('plugin-license-manager'), 
     id: 'username',
     name: 'username',
+    required: true,
     value: settings['username']})
 }}
 
 {{ forms.textField({
-    label: 'Api key',
-    instructions: 'Token for the Craft id API', 
+    label: 'settings__apikey__label'|t('plugin-license-manager'),
+    instructions: 'settings__apikey__instructions'|t('plugin-license-manager'),  
     id: 'apiKey',
     name: 'apiKey',
+    required: true,
     value: settings['apiKey']})
 }}
 
 {{ forms.textField({
-    label: 'Developer name',
-    instructions: 'Developer name appearing in the Developer > Profile section of the Craft id API panel', 
+    label: 'settings__developername__label'|t('plugin-license-manager'),
+    instructions: 'settings__developername__instructions'|t('plugin-license-manager'),  
     id: 'developerName',
     name: 'developerName',
+    required: true,
     value: settings['developerName']})
 }}
 
 {{ forms.textField({
-    label: 'License email',
-    instructions: 'Email for generate license', 
+    label: 'settings__email__label'|t('plugin-license-manager'),
+    instructions: 'settings__email__instructions'|t('plugin-license-manager'),  
     id: 'licenseEmail',
     name: 'licenseEmail',
+    required: true,
     value: settings['licenseEmail']})
 }}
 

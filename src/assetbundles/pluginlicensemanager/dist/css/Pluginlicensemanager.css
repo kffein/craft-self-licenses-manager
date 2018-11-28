@@ -47,6 +47,8 @@
      }
 
 .pluginlicensemanager-plugin .plugin-info-editions{
+    display: flex;
+    align-items: center;
     margin-right: 40px;
 }
 
@@ -65,6 +67,8 @@
 }
 
 .pluginlicensemanager-plugin .developer-info-icon{
+    display: flex;
+    align-items: center;
     width: 50px;
 }
 
