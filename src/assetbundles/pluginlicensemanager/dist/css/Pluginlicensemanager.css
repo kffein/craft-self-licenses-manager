@@ -61,6 +61,10 @@
     margin-top: 20px;
 }
 
+.pluginlicensemanager-plugin .license-status-valid{
+    color: #1e8449;
+}
+
 
 .pluginlicensemanager-plugin .developer-info{
     display: flex;

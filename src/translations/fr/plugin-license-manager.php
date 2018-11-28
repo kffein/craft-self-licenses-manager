@@ -30,12 +30,14 @@ return [
         Please note that not all of plugins listed below can have a license generated.
     ',
     'index__form__button__label' => 'Generate',
+    'index__form__licenseeditions' => 'Editions',
     'index__allpluginactivated' => 'All plugins activated',
     'index__errors__invalidCredential' => '
         <p>The username and/or Api key is invalid.</p>
         <p>Please validate the plugin settings</p>
         <p><a href="/admin/settings/plugins/plugin-license-manager" class="btn submit">Settings</a></p>
     ',
+    'index__form__licensestatusvalid' => 'License status is valid',
     'errors__email' => 'Invalid email address. Please submit a valid email address.',
     'errors__nopluginsselected' => 'No plugins selected. Please select at least one plugin.',
     'errors__forplugins' => 'Errors for plugin license : ',

@@ -103,22 +103,29 @@
                             </div>
 
                             <div class="plugin-info-editions">
-                                {{ forms.selectField({
-                                    id: "edition",
-                                    name: editionFormName,
-                                    label: "Editions",
-                                    required: true,
-                                    options: editionOptions,
-                                    value: editionOptions[0].value
-                                }) }}
+                                {% if plugin.needLicense %}
+                                    {{ forms.selectField({
+                                        id: "edition",
+                                        name: editionFormName,
+                                        label: 'index__form__licenseeditions'|t('plugin-license-manager'),
+                                        required: true,
+                                        options: editionOptions,
+                                        value: editionOptions[0].value
+                                    }) }}
+
+                                {% else %}
+                                    <p class="license-status-valid">{{'index__form__licensestatusvalid'|t('plugin-license-manager')}}</p>
+                                {% endif %}
                             </div>
 
                             <div class="plugin-info-lightswitch">
-                                {{ forms.lightswitchField({
-                                    id: plugin.handle,
-                                    name: lightswitchFormName,
-                                    on: isSwitchOn,
-                                }) }}
+                                {% if plugin.needLicense %}
+                                    {{ forms.lightswitchField({
+                                        id: plugin.handle,
+                                        name: lightswitchFormName,
+                                        on: isSwitchOn,
+                                    }) }}
+                                {% endif %}
                             </div>
 
                             

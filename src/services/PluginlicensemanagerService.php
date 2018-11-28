@@ -138,11 +138,11 @@ class PluginlicensemanagerService extends Component
         });
 
         // Filter out plugin with license status is invalid
-        $unregisteredPlugins = array_filter($plugins, function ($plugin) use ($allPlugins) {
-            return $allPlugins[$plugin['handle']]['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
-        });
+        // $unregisteredPlugins = array_filter($plugins, function ($plugin) use ($allPlugins) {
+        //     return $allPlugins[$plugin['handle']]['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID;
+        // });
 
-        return $this->formatPluginData($unregisteredPlugins);
+        return $this->formatPluginData($plugins);
     }
 
     /**
@@ -167,7 +167,9 @@ class PluginlicensemanagerService extends Component
      */
     private function formatPluginData(array $plugins) : array
     {
-        return array_map(function ($plugin) {
+        $allPlugins = Craft::$app->plugins->allPluginInfo;
+
+        return array_map(function ($plugin) use ($allPlugins) {
             $plugin = (object) $plugin;
 
             $editions = array_map(function ($edition) {
@@ -179,13 +181,16 @@ class PluginlicensemanagerService extends Component
                 ];
             }, $plugin->editions);
 
+            $internalPlugin = $allPlugins[$plugin->handle];
+
             return [
                 'name' => $plugin->name,
                 'handle' => $plugin->handle,
                 'version' => $plugin->version,
                 'iconUrl' => $plugin->iconUrl,
                 'shortDescription' => $plugin->shortDescription,
-                'editions' => $editions
+                'editions' => $editions,
+                'needLicense' => $internalPlugin['licenseKeyStatus'] !== self::LICENSE_STATUS_VALID
             ];
         }, $plugins);
     }
