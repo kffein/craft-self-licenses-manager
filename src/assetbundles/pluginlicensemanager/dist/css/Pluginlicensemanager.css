@@ -58,3 +58,28 @@
 .pluginlicensemanager-plugin .btn.submit{
     margin-top: 20px;
 }
+
+
+.pluginlicensemanager-plugin .developer-info{
+    display: flex;
+}
+
+.pluginlicensemanager-plugin .developer-info-icon{
+    width: 50px;
+}
+
+    .pluginlicensemanager-plugin .developer-info-icon img{
+        height: 50px;
+    }
+
+.pluginlicensemanager-plugin .developer-info-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 0.3;
+    margin: 0 40px;
+}
+
+    .pluginlicensemanager-plugin .developer-info-content p{
+        margin: 0;
+    }

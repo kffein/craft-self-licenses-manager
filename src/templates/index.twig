@@ -41,7 +41,7 @@
         {% set unregisteredPlugins = craft.pluginlicensemanager.unregisteredPlugins %}
         {% set settings = craft.pluginlicensemanager.settings %}
         {% set requestPostPluginsHandle = craft.request.getPost('pluginsHandle') ?? [] %}
-        {# {% set developerInfo = craft.pluginlicensemanager.developerInfo %} #}
+        {% set developerInfo = craft.pluginlicensemanager.developerInfo %}
 
         {% if pluginErrors %}
             {% switch pluginErrors %}
@@ -54,6 +54,19 @@
 
             <h2 class="subtitle">{{'index__title'|t('plugin-license-manager')}}</h2>
 
+            {% if developerInfo %}
+                <div class="developer-info">
+                    <div class="developer-info-icon">
+                        <img src="{{ developerInfo.photoUrl }}" />
+                    </div>
+                    <div class="developer-info-content">
+                        <p><strong>{{ developerInfo.developerName }}</strong></p>
+                        <p>{{ developerInfo.developerUrl }}</p>
+                        <p>{{ developerInfo.email }}</p>
+                        <p>{{ developerInfo.location }}</p>
+                    </div>
+                </div>
+            {% endif %}
 
             {% if unregisteredPlugins|length %}
 
