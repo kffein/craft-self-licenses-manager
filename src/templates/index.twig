@@ -22,13 +22,13 @@
 {% set docsUrl = "???" %}
 
 {% set title = craft.pluginlicensemanager.pluginName %}
-
 {% set pluginCpUrl = url('plugin-license-manager') %}
+{% set i18nlocale = 'en' %}
 
 
 {% set extraPageHeaderHtml %}
     <div class="buttons">
-        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('plugin-license-manager') }}</a>
+        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('plugin-license-manager', [], i18nlocale) }}</a>
     </div>
 {% endset %}
 
@@ -52,7 +52,7 @@
 
         {% else %}
 
-            <h2 class="subtitle">{{'index__title'|t('plugin-license-manager')}}</h2>
+            <h2 class="subtitle">{{'index__title'|t('plugin-license-manager', [], i18nlocale)}}</h2>
 
             {% if developerInfo %}
                 <div class="developer-info">
@@ -107,14 +107,14 @@
                                     {{ forms.selectField({
                                         id: "edition",
                                         name: editionFormName,
-                                        label: 'index__form__licenseeditions'|t('plugin-license-manager'),
+                                        label: 'index__form__licenseeditions'|t('plugin-license-manager', [], i18nlocale),
                                         required: true,
                                         options: editionOptions,
                                         value: editionOptions[0].value
                                     }) }}
 
                                 {% else %}
-                                    <p class="license-status-valid">{{'index__form__licensestatusvalid'|t('plugin-license-manager')}}</p>
+                                    <p class="license-status-valid">{{'index__form__licensestatusvalid'|t('plugin-license-manager', [], i18nlocale)}}</p>
                                 {% endif %}
                             </div>
 
@@ -135,14 +135,14 @@
 
                     {% endfor %}
 
-                    <input type="submit" class="btn submit" value="{{'index__form__button__label'|t('plugin-license-manager')}}">
+                    <input type="submit" class="btn submit" value="{{'index__form__button__label'|t('plugin-license-manager', [], i18nlocale)}}">
                     
 
                 </form>
 
             {% else %}
 
-                <p>{{'index__allpluginactivated'|t('plugin-license-manager')}}</p>
+                <p>{{'index__allpluginactivated'|t('plugin-license-manager', [], i18nlocale)}}</p>
 
             {% endif %}
 

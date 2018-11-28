@@ -22,6 +22,7 @@ use Craft;
 class PluginlicensemanagerService extends Component
 {
     private const LICENSE_STATUS_VALID = 'valid';
+    private const I18N_DEFAULT_LOCALE = 'en';
     const SESSION_FLASH_KEY = 'plugin-license-manager';
 
     private $settings;
@@ -104,7 +105,7 @@ class PluginlicensemanagerService extends Component
         $ownPlugins = $this->getPluginsByDeveloperName();
 
         if (empty($ownPlugins)) {
-            Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__nopluginsapifound'));
+            Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__nopluginsapifound', [], self::I18N_DEFAULT_LOCALE));
             return [];
         }
 
