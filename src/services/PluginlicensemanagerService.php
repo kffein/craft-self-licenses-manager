@@ -21,11 +21,11 @@ use Craft;
  */
 class PluginlicensemanagerService extends Component
 {
-    private const API_HOST_URL = 'https://api.craftcms.com/v1/';
     private const LICENSE_STATUS_VALID = 'valid';
     const SESSION_FLASH_KEY = 'plugin-license-manager';
 
     private $settings;
+    private $apiEndPoint;
 
     // Public Methods
     // =========================================================================
@@ -33,6 +33,7 @@ class PluginlicensemanagerService extends Component
     public function __construct()
     {
         $this->settings = Pluginlicensemanager::$plugin->getSettings();
+        $this->apiEndPoint = Craft::$app->pluginStore->craftApiEndpoint . '/';
     }
 
     public function getUnregisteredPlugins() : array
@@ -140,6 +141,27 @@ class PluginlicensemanagerService extends Component
         return (!isset($result->message));
     }
 
+    public function getDeveloperInfo()
+    {
+        $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
+        $apiPlugins = $apiPluginsData->plugins;
+        $pluginForDeveloper = null;
+        $developerName = $this->settings->developerName;
+        foreach ($apiPlugins as $plugin) {
+            if (strtolower($plugin['developerName']) === strtolower($developerName)) {
+                $pluginForDeveloper = $plugin;
+                break;
+            }
+        }
+        if ($pluginForDeveloper === null) {
+            return null;
+        }
+
+        $developerId = $pluginForDeveloper['developerId'];
+        $developerInfo = Craft::$app->api->getDeveloper($developerId);
+        return (!isset($developerInfo->error)) ? $developerInfo : null;
+    }
+
     /**
      * Get the complete plugins list
      * Filter plugins with the same developerName as the settings (case-insensitive)
@@ -165,7 +187,7 @@ class PluginlicensemanagerService extends Component
      */
     private function getLicenses(int $page = 1) : object
     {
-        $url = self::API_HOST_URL . 'plugin-licenses?page=' . $page;
+        $url = $this->apiEndPoint . 'plugin-licenses?page=' . $page;
         $result = $this->makeRequest($url, [], 'GET');
         $this->validateRequest($result);
         return $result;
@@ -186,7 +208,7 @@ class PluginlicensemanagerService extends Component
             'email' => $email
           ];
 
-        $url = self::API_HOST_URL . 'plugin-licenses';
+        $url = $this->apiEndPoint . 'plugin-licenses';
 
         $result = $this->makeRequest($url, $options);
 

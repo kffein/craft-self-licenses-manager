@@ -30,7 +30,7 @@
         }
     },
     "extra": {
-        "name": "Plugin license manager",
+        "name": "Self licences manager",
         "handle": "plugin-license-manager",
         "hasCpSettings": true,
         "hasCpSection": true,

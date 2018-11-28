@@ -76,6 +76,6 @@ class DefaultController extends Controller
             Craft::$app->getSession()->setError($errorMsg);
         }
 
-        return $this->renderTemplate('plugin-license-manager/index');
+        return $this->redirectToPostedUrl();
     }
 }
