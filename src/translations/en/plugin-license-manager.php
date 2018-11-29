@@ -55,5 +55,5 @@ return [
     'settings__developername__label' => 'Developer name',
     'settings__developername__instructions' => 'Developer name appearing in the Developer > Profile section of the Craft id API panel',
     'settings__email__label' => 'License email',
-    'settings__email__instructions' => 'Email for generate license',
+    'settings__email__instructions' => 'Email used for generating license',
 ];
