@@ -32,6 +32,11 @@ return [
     'index__form__button__label' => 'Generate',
     'index__form__licenseeditions' => 'Editions',
     'index__allpluginactivated' => 'All plugins activated',
+    'index__errors__noplugingfound' => '
+        <p>No plugins found for the developer name defined in the settings page.</p>
+        <p>Please validate the settings informations</p>
+        <p><a href="/admin/settings/plugins/plugin-license-manager" class="btn submit">Settings</a></p>
+    ',
     'index__errors__invalidCredential' => '
         <p>The username and/or Api key is invalid.</p>
         <p>Please validate the plugin settings</p>
