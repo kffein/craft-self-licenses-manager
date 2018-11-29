@@ -36,7 +36,7 @@ Fill the required fields with the informations found on https://id.craftcms.com
 
 ![Screenshot](resources/img/settings.png)
 
-On save, theses informations will be validate with the Craftnet API for validation. If informations is correct, you'll be redirect to the license plugin page.
+On save, theses informations will be validate with the Craftnet API for validation for validation.
 
 ## License generation
 
@@ -49,3 +49,9 @@ Note : Only registered CraftID plugins that required license will be shown.
 To generate a license, turn on the lightswitch for the selected plugins and click on save button.
 
 Each plugins selected will fetch a license with the Craftnet API and the license will be auto-register with the plugins.
+
+## Credits
+
+- Icon Generator by lastspark from the Noun Project
+
+Brought to you by [KFFEIN](http://kffein.com)
