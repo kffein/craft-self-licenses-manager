@@ -103,8 +103,6 @@ class Pluginlicensemanager extends Plugin
                     Craft::$app->getSession()->setError('API validation fail. Invalid settings informations');
                     Craft::$app->getResponse()->redirect('/admin/settings/plugins/plugin-license-manager')->send();
                 }
-                Craft::$app->getResponse()->redirect('/admin/plugin-license-manager')->send();
-                return true;
             }
         );
 
