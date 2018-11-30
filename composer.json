@@ -11,14 +11,14 @@
         "plugin-license-manager"
     ],
     "support": {
-        "docs": "???",
-        "issues": "???"
+        "docs": "https://github.com/kffein/craft-self-licenses-manager",
+        "issues": "https://github.com/kffein/craft-self-licenses-manager/issues"
     },
     "license": "MIT",
     "authors": [
         {
             "name": "Kffein",
-            "homepage": "kffein.com"
+            "homepage": "https://kffein.com"
         }
     ],
     "require": {
