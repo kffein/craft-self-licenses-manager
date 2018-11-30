@@ -14,7 +14,14 @@ This plugin requires Craft CMS 3.0.0-beta.23 or later.
 
 ## Installation
 
-You can install Self licenses manager via the Plugin Store in the Craft AdminCP.
+To install Self licenses manager, follow these steps:
+
+1. Install with Composer via composer require kffein/craft-self-license-manager from your project directory
+2. Install plugin in the Craft Control Panel under Settings > Plugins
+
+Or
+
+You can also install Self licenses manager via the Plugin Store in the Craft AdminCP.
 
 ## Configuration
 
