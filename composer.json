@@ -2,7 +2,6 @@
     "name": "kffein/plugin-license-manager",
     "description": "Plugin license manager",
     "type": "craft-plugin",
-    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
