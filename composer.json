@@ -2,6 +2,7 @@
     "name": "kffein/plugin-license-manager",
     "description": "Plugin license manager",
     "type": "craft-plugin",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
@@ -33,7 +34,7 @@
         "handle": "plugin-license-manager",
         "hasCpSettings": true,
         "hasCpSection": true,
-        "changelogUrl": "???",
+        "changelogUrl": "https://github.com/kffein/craft-self-licenses-manager/blob/master/CHANGELOG.md",
         "components": {
             "pluginlicensemanagerService": "kffein\\pluginlicensemanager\\services\\PluginlicensemanagerService"
         },
