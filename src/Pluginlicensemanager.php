@@ -98,10 +98,12 @@ class Pluginlicensemanager extends Plugin
             Plugin::class,
             Plugin::EVENT_BEFORE_SAVE_SETTINGS,
             function (Event $event) {
-                $isValid = Pluginlicensemanager::getInstance()->pluginlicensemanagerService->validateSettingsWithApi();
-                if (!$isValid) {
-                    Craft::$app->getSession()->setError('API validation fail. Invalid settings informations');
-                    Craft::$app->getResponse()->redirect('/admin/settings/plugins/plugin-license-manager')->send();
+                if ($event->sender->id === $this->handle) {
+                    $isValid = Pluginlicensemanager::getInstance()->pluginlicensemanagerService->validateSettingsWithApi();
+                    if (!$isValid) {
+                        Craft::$app->getSession()->setError('API validation fail. Invalid settings informations');
+                        Craft::$app->getResponse()->redirect('/admin/settings/plugins/plugin-license-manager')->send();
+                    }
                 }
             }
         );
