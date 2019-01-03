@@ -23,13 +23,16 @@ class DefaultController extends Controller
 {
     // Protected Properties
     // =========================================================================
-
     /**
      * @var    bool|array Allows anonymous access to this controller's actions.
      *         The actions must be in 'kebab-case'
      * @access protected
      */
     protected $allowAnonymous = ['generate'];
+
+    // Private Properties
+    // =========================================================================
+    private const I18N_DEFAULT_LOCALE = 'en';
 
     // Public Methods
     // =========================================================================
@@ -48,7 +51,7 @@ class DefaultController extends Controller
         $errors = [];
 
         if (empty($plugins)) {
-            Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__nopluginsselected'));
+            Craft::$app->getSession()->setError(Craft::t('plugin-license-manager', 'errors__nopluginsselected', [], self::I18N_DEFAULT_LOCALE));
             return $this->renderTemplate('plugin-license-manager/index');
         }
 
@@ -67,12 +70,12 @@ class DefaultController extends Controller
         }
 
         if ($success) {
-            $successMsg = Craft::t('plugin-license-manager', 'success__forplugins') . implode(', ', $success);
+            $successMsg = Craft::t('plugin-license-manager', 'success__forplugins', [], self::I18N_DEFAULT_LOCALE) . implode(', ', $success);
             Craft::$app->getSession()->setNotice($successMsg);
         }
 
         if (!empty($errors)) {
-            $errorMsg = Craft::t('plugin-license-manager', 'errors__forplugins') . implode(', ', $errors);
+            $errorMsg = Craft::t('plugin-license-manager', 'errors__forplugins', [], self::I18N_DEFAULT_LOCALE) . implode(', ', $errors);
             Craft::$app->getSession()->setError($errorMsg);
         }
 
