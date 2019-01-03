@@ -40,7 +40,7 @@
         {% set pluginErrors = craft.pluginlicensemanager.errors %}
         {% set unregisteredPlugins = craft.pluginlicensemanager.unregisteredPlugins %}
         {% set settings = craft.pluginlicensemanager.settings %}
-        {% set requestPostPluginsHandle = craft.request.getPost('pluginsHandle') ?? [] %}
+        {% set requestPostPluginsHandle = craft.request.getBodyParam('pluginsHandle') ?? [] %}
         {% set developerInfo = craft.pluginlicensemanager.developerInfo %}
 
         {% if pluginErrors %}
