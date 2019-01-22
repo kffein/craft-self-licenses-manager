@@ -21,8 +21,8 @@ use Craft;
  */
 class PluginlicensemanagerService extends Component
 {
-    private const LICENSE_STATUS_VALID = 'valid';
-    private const I18N_DEFAULT_LOCALE = 'en';
+    const LICENSE_STATUS_VALID = 'valid';
+    const I18N_DEFAULT_LOCALE = 'en';
     const SESSION_FLASH_KEY = 'plugin-license-manager';
 
     private $settings;
@@ -67,7 +67,7 @@ class PluginlicensemanagerService extends Component
      *
      * @return array
      */
-    public function getDeveloperInfo() : ?array
+    public function getDeveloperInfo()
     {
         $apiPluginsData = (object) Craft::$app->api->getPluginStoreData();
         $apiPlugins = $apiPluginsData->plugins;
@@ -203,7 +203,7 @@ class PluginlicensemanagerService extends Component
      * @param string $pluginHandle
      * @return object
      */
-    private function generateLicense(string $email, string $pluginHandle, string $editionHandle) : object
+    private function generateLicense(string $email, string $pluginHandle, string $editionHandle) : \stdClass
     {
         $options = [
             'edition' => $editionHandle,
@@ -224,7 +224,7 @@ class PluginlicensemanagerService extends Component
     * @param integer $page
     * @return array
     */
-    private function getLicenses(int $page = 1, int $perPage = 100) : object
+    private function getLicenses(int $page = 1, int $perPage = 100) : \stdClass
     {
         $params = "?plugin-licenses?page={$page}&perPage={$perPage}";
         $url = $this->apiEndPoint . 'plugin-licenses' . $params;
@@ -299,7 +299,7 @@ class PluginlicensemanagerService extends Component
      * @param [type] $response
      * @return void
      */
-    private function validateRequest($response) : void
+    private function validateRequest($response)
     {
         if (isset($response->message)) {
             Craft::$app->getSession()->set(self::SESSION_FLASH_KEY, $response->message);

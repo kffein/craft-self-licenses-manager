@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.5 - 2019-01-22
+### Fix
+- Add support for previous php versions < 7.2
+
 ## 1.0.4 - 2019-01-03
 ### Fix
 - Fix i18n translations

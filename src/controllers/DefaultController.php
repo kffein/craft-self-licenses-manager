@@ -32,7 +32,7 @@ class DefaultController extends Controller
 
     // Private Properties
     // =========================================================================
-    private const I18N_DEFAULT_LOCALE = 'en';
+    const I18N_DEFAULT_LOCALE = 'en';
 
     // Public Methods
     // =========================================================================
