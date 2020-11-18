@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 Kffein
  */
 
-namespace kffein\pluginlicensemanager\assetbundles\Pluginlicensemanager;
+namespace kffein\pluginlicensemanager\assetbundles\pluginlicensemanager;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
